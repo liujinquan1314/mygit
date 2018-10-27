@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.org.dao.ExpenseDao">
+	
+	
+	<!-- 添加报销单 -->
+	<insert id="addExpense" parameterType="Expense" useGeneratedKeys="true" keyProperty="expenseId">
+		
+	insert into expense_account(user_id,expense_name,expense_desc,expense_time,expense_state,expense_total)
+	values(#{userId},#{expenseName},#{expenseDesc},#{expenseTime},#{expenseState},#{expenseTotal})
+	</insert>
+	
+	<!-- 添加报销单明细 -->
+	<insert id="addExpenseDetails" parameterType="ExpenseDetails">
+		insert into expense_details(expense_id,cost_id,expense_details_amount)
+		values(#{expenseId},#{costId},#{expenseDetailsAmount})
+	</insert>
+	
+	
+</mapper>

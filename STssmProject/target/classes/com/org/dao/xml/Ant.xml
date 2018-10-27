@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.org.dao.AntDao">
+	
+	<resultMap type="Ant" id="resultMenuMap">	
+		<result property="roleMenuId" column="role_menu_id"/>
+		<result property="menuId" column="menu_id"/>
+		<result property="roleId" column="role_id"/>
+	</resultMap> 
+	
+	<!-- 根据角色查询已有菜单 -->
+	 <select id="list" parameterType="Ant" resultMap="resultMenuMap">
+		select  * from role_menu_info where role_id=#{roleId}
+	</select>
+	
+	<insert id="add" parameterType="Ant">
+		insert into role_menu_info(menu_id,role_id)
+		values(#{menuId},#{roleId})
+	</insert>
+	
+	<delete id="delete" parameterType="Integer">
+		delete from role_menu_info where role_id=#{roleId}
+	</delete>
+	
+	<select id="getMenuList" parameterType="Integer" resultType="map">
+		select b.* from role_menu_info a ,menu_info  b
+		where a.menu_id=b.menu_id and a.role_id=#{roleId} 
+	</select> 
+</mapper>

@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.org.dao.ManageDao">
+
+ <resultMap type="Expense" id="resultExpense">
+
+	<result property="expenseId" column="expense_id"/>
+	<result property="userId" column="user_id"/>
+	<result property="expenseName" column="expense_name"/>
+	<result property="expenseDesc" column="expense_desc"/>
+	<result property="expenseTime" column="expense_time"/>
+	<result property="expenseState" column="expense_state"/>
+	<result property="expenseTotal" column="expense_total"/>
+	<result property="userName" column="user_name"/>
+	
+ </resultMap>
+ 
+ <resultMap type="Cost" id="resultCost">
+
+	<result property="costId" column="cost_id"/>
+	<result property="costName" column="cost_name"/>
+	<result property="costDesc" column="cost_desc"/>
+	<result property="costMark" column="cost_mark"/>
+	<result property="expenseDetailsAmount" column="expense_details_amount"/>
+
+	</resultMap>
+	
+	<resultMap type="AudHistory" id="resultHis">
+
+	<result property="auditId" column="audit_id"/>
+	<result property="expenseId" column="expense_id"/>
+	<result property="userId" column="user_id"/>
+	<result property="expenseTime" column="audit_time"/>
+	<result property="auditState" column="audit_state"/>
+	<result property="auditDesc" column="audit_desc"/>
+
+	</resultMap>
+ 
+ <!-- 显示报销单 -->
+ 
+ <select id="list" parameterType="Expense" resultMap="resultExpense">
+ 	select a.*, b.user_name from expense_account a,user_info b where a.user_id=b.user_id 
+ 
+ </select>
+ 
+ 
+ <!-- 查询报销单 -->
+ <select id="findByName" parameterType="Expense" resultMap="resultExpense">
+ 	select a.*, b.user_name from expense_account a,user_info b where a.user_id=b.user_id and user_name=#{userName} and expense_time=#{expenseTime}
+ 
+ </select>
+ 
+ 	<!-- 单个查询Account -->
+	<select id="findById" parameterType="Integer" resultMap="resultExpense" >
+	select * from expense_account where expense_id=#{expenseId}
+	</select>
+ 
+ 	<!-- 单个查询cost -->
+	<select id="findcost" parameterType="Integer" resultMap="resultCost" >
+	
+	select a.expense_details_amount,b.* from expense_details a,cost_info b where a.cost_id=b.cost_id and expense_id=#{expenseId}
+	
+	</select>
+ 
+	<!-- 增加 -->
+	<insert id="addhis" parameterType="AudHistory" >
+		insert into audit_history (expense_id,user_id,audit_time ,audit_state,audit_desc) values (#{expenseId},#{userId},#{expenseTime},#{auditState},#{auditDesc})
+	</insert>
+	
+	<select id="findadut" parameterType="AudHistory" resultMap="resultHis" >
+	
+	select a.*, b.user_name from audit_history a,user_info b where a.user_id=b.user_id 
+	
+	</select>
+	
+	<!-- 更新审核状态 -->
+	
+	<update id="updateExpense" parameterType="Expense" >
+		
+		update expense_account set expense_state=#{expenseState} where expense_id=#{expenseId}
+	
+	</update>
+	<!--删除操作 、修改
+	
+	<delete id="update" parameterType="User">
+	update user_info
+		<set>
+			<if test="roleId!=null">
+			role_id=#{roleId},
+			</if>
+			<if test="userName!=null">
+			user_name=#{userName},
+			</if>
+			<if test="userSex!=null">
+			user_sex=#{userSex},
+			</if>
+			
+			<if test="userAge!=null">
+			user_age=#{userAge},
+			</if>
+			<if test="userAccount!=null">
+			user_account=#{userAccount},
+			</if>
+			<if test="userPassword!=null">
+			user_password=#{userPassword},
+			</if>
+			<if test="userSalary!=null">
+			user_salary=#{userSalary},
+			</if>
+			<if test="userMark!=null">
+			user_mark=#{userMark},
+			</if>
+		</set>
+		where user_id=#{userId}
+	
+	</delete>
+	
+		
+	<select id="login" parameterType="User" resultMap="resultUser">
+		
+		select * from user_info where user_account=#{userAccount} and user_password=#{userPassword} and user_mark='0';
+		
+	</select> -->
+	
+</mapper>

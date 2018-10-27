@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.org.dao.CostDao">
+	
+	<resultMap type="Cost" id="resultCost">
+
+	<result property="costId" column="cost_id"/>
+	<result property="costName" column="cost_name"/>
+	<result property="costDesc" column="cost_desc"/>
+	<result property="costMark" column="cost_mark"/>
+
+	</resultMap>
+	
+	<!-- 查询全部 -->
+	<select id="list" resultMap="resultCost" parameterType="Cost">
+		select * from cost_info where cost_mark=#{costMark}
+	</select>
+
+	<!--  增加 -->
+	<insert id="add" parameterType="Cost">
+		insert into cost_info (cost_name,cost_desc,cost_mark) values (#{costName},#{costDesc},#{costMark})
+	</insert>
+	
+	<!-- 单个查询 -->
+	<select id="findByName" parameterType="Cost" resultMap="resultCost">
+		select * from cost_info where cost_name=#{costName}
+	</select>
+	
+	<!-- 修改1 -->
+	<select id="findById" parameterType="Integer" resultMap="resultCost" >
+		
+		select * from cost_info where cost_id=#{costId}
+	
+	</select> 
+	
+	<!-- 修改2 -->
+	<update id="update2" parameterType="Cost">
+		update cost_info
+		
+		<set>
+			<if test="costName!=null">
+			cost_name=#{costName},
+			</if>
+			
+			<if test="costDesc!=null">
+			cost_desc=#{costDesc},
+			</if>
+			
+			<if test="costMark!=null">
+			cost_mark=#{costMark},
+			</if>
+		</set>
+		where cost_id=#{costId}
+		
+	</update>
+	
+	
+	<!-- 删除操作 、修改
+	
+	<delete id="update" parameterType="Role">
+	update role_info
+		
+		<set>
+			<if test="roleName!=null">
+			role_name=#{roleName},
+			</if>
+			
+			<if test="roleDesc!=null">
+			role_desc=#{roleDesc},
+			</if>
+			
+			<if test="roleMark!=null">
+			role_mark=#{roleMark},
+			</if>
+		</set>
+		where role_id=#{roleId}
+		
+	</delete>
+	
+
+	 -->
+	
+</mapper>

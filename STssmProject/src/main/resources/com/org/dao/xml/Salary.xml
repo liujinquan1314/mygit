@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.org.dao.SalaryDao">
+
+
+<resultMap type="User" id="resultUser">
+
+	<result property="userId" column="user_id"/>
+	<result property="roleId" column="role_id"/>
+	<result property="userName" column="user_name"/>
+	<result property="userSex" column="user_sex"/>
+	<result property="userAge" column="user_age"/>
+	<result property="userAccount" column="user_account"/>
+	<result property="userPassword" column="user_password"/>
+	<result property="userSalary" column="user_salary"/>
+	<result property="userMark" column="user_mark"/>
+	<result property="roleName" column="role_name"/>
+	
+	</resultMap>
+	
+	<resultMap type="Salary" id="resultSalary">
+
+	<result property="paymentId" column="payment_id"/>
+	<result property="userId" column="user_id"/>
+	<result property="paymentTime" column="payment_time"/>
+	<result property="paymentMoney" column="payment_money"/>
+	<result property="userName" column="user_name"/>
+	
+	</resultMap>
+	
+	<!-- 添加工资 -->
+
+<insert id="add" parameterType="Salary">
+	
+	insert into salary_payment (user_id,payment_time,payment_money) values (#{userId},#{paymentTime},#{paymentMoney})
+</insert>
+
+<!-- 显示工资列表 -->
+	<select id="list" parameterType="Salary" resultMap="resultSalary">
+	
+	select a.*,b.user_name from salary_payment a,user_info b where a.user_id=b.user_id
+	</select>
+<!-- 查询工资byusername -->
+	<select id="findByName" parameterType="Salary" resultMap="resultSalary">
+ 	select a.*, b.user_name from salary_payment a,user_info b where a.user_id=b.user_id and user_name=#{userName} and payment_time=#{paymentTime}
+ 
+ </select>
+</mapper>
+

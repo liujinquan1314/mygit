@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.org.dao.MenuDao">
+	
+	
+	
+	<resultMap type="Menu" id="menuMap">
+		<result column="menu_id" property="menuId"/>
+		<result column="prent_menu_id" property="parentMenuId"/>
+		<result column="menu_name" property="menuName"/>
+		<result column="menu_url" property="menuUrl"/>
+		<result column="prent_name" property="prentName"/>
+	</resultMap>
+<!-- 列出全部 -->
+	<select id="list" parameterType="Menu" resultMap="menuMap">
+	
+			select * from menu_info
+	</select>
+	<!-- 增添1 -->
+	<select id="getInfo" parameterType="Menu" resultMap="menuMap">
+	
+		select a.*,b.menu_name as prent_name  from menu_info a ,menu_info b
+		
+		where a.prent_menu_id=b.menu_id
+		
+		and a.menu_id=#{menuId}
+	</select>
+	<!-- 增添2 -->
+	<insert id="add" parameterType="Menu">
+		insert into menu_info(prent_menu_id,menu_name,menu_url)
+		values(#{parentMenuId},#{menuName},#{menuUrl})
+	</insert>
+	<!-- 修改1 -->
+	<select id="findById" parameterType="Integer" resultMap="menuMap" >
+	select * from menu_info where menu_id=#{menuId}
+	
+	</select>
+	<!-- 修改2 -->
+	
+	<update id="update" parameterType="Menu">
+		update menu_info
+		<set>
+			<if test="parentMenuId!=null">
+			prent_menu_id=#{parentMenuId},
+			</if>
+			
+			<if test="menuName!=null">
+			menu_name=#{menuName},
+			</if>
+			
+			<if test="menuUrl!=null">
+			menu_url=#{menuUrl},
+			</if>
+		</set>
+		where menu_id=#{menuId}
+		
+	</update>
+	
+	<!-- 删除操作1 -->
+	<select id="findzi" parameterType="Menu" resultMap="menuMap">
+		
+		select * from  menu_info where prent_menu_id=#{menuId}
+	
+	</select>
+	
+	<!-- 删除操作2 -->
+	<delete id="delete" parameterType="Integer">
+		delete from menu_info where menu_id=#{menuId}
+	
+	</delete>
+	
+</mapper> 
